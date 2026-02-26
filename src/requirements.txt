@@ -1,0 +1,18 @@
+dvc
+dvc[s3]
+nltk
+boto3
+numpy
+awscli
+pandas
+PyYAML
+mlflow
+dagshub
+fastapi
+seaborn
+xgboost
+wordcloud
+collection
+scikit-learn
+
+-e .
