@@ -1,11 +1,11 @@
 stages:
   data_ingestion_and_preprocessing:
-    cmd: python data/data_ingestion_and_preprocessing.py
+    cmd: python src/data/data_ingestion_and_preprocessing.py
     deps:
-      - data/data_ingestion_and_preprocessing.py
+      - src/data/data_ingestion_and_preprocessing.py
     params:
       - data_ingestion.data_path
       - data_ingestion.test_size
     outs:
-      - data/raw
-      - data/processed
+      - src/data/raw
+      - src/data/processed
