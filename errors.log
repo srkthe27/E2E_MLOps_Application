@@ -1,0 +1,26 @@
+2026-02-26 20:42:43,544 - data_ingestion - ERROR - File not found: D:\Programs\Python\MLops\my-code\Final_Project\src\params.yaml
+2026-02-26 20:42:43,544 - data_ingestion - ERROR - Failed to complete the data ingestion and preprocessing process: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\params.yaml'
+Traceback (most recent call last):
+  File "D:\Programs\Python\MLops\my-code\Final_Project\src\data\data_ingestion_and_preprocessing.py", line 112, in main
+    params = load_params(os.path.join(PROJECT_ROOT, "params.yaml"))
+  File "D:\Programs\Python\MLops\my-code\Final_Project\src\data\data_ingestion_and_preprocessing.py", line 28, in load_params
+    with open(params_path,'r') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\params.yaml'
+2026-02-26 20:43:43,537 - data_ingestion - ERROR - Unexpected error occurred while loading the data: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\IMDB Dataset.csv'
+2026-02-26 20:43:43,538 - data_ingestion - ERROR - Failed to complete the data ingestion and preprocessing process: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\IMDB Dataset.csv'
+Traceback (most recent call last):
+  File "D:\Programs\Python\MLops\my-code\Final_Project\src\data\data_ingestion_and_preprocessing.py", line 117, in main
+    df = load_data(data_url=DATA_URL)
+  File "D:\Programs\Python\MLops\my-code\Final_Project\src\data\data_ingestion_and_preprocessing.py", line 58, in load_data
+    df = readers[ext](data_url)
+  File "D:\Programs\Python\MLops\.venv\lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "D:\Programs\Python\MLops\.venv\lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "D:\Programs\Python\MLops\.venv\lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "D:\Programs\Python\MLops\.venv\lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "D:\Programs\Python\MLops\.venv\lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\IMDB Dataset.csv'

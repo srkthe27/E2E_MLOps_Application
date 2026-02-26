@@ -4,7 +4,7 @@ import logging
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from custom_preprocess_helper import CustomNLPDatasetOp,CustomNLPPreprocessor
+from src.custom_preprocess_helper import CustomNLPDatasetOp,CustomNLPPreprocessor
 
 logger = logging.getLogger('data_ingestion')
 logger.setLevel(logging.DEBUG)
@@ -108,7 +108,7 @@ def main():
         logger.debug('Starting data ingestion and preprocessing...')
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../"))
+        PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../../"))
         params = load_params(os.path.join(PROJECT_ROOT, "params.yaml"))
         relative_data_path = params['data_ingestion']['data_path']
         DATA_URL = os.path.join(PROJECT_ROOT, relative_data_path)

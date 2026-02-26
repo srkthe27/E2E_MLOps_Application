@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  data_ingestion_and_preprocessing:
+    cmd: python -m src.data.data_ingestion_and_preprocessing
+    deps:
+    - path: src/data/data_ingestion_and_preprocessing.py
+      hash: md5
+      md5: 50f7ae8676342808e8c44d4aa93d27ed
+      size: 5091
+    params:
+      params.yaml:
+        data_ingestion.data_path: src/IMDB Dataset.csv
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 5fa87b00604086d440ef39f5d4d61692.dir
+      size: 110298792
+      nfiles: 2
+    - path: data/raw
+      hash: md5
+      md5: 8244fc760f52fd595ce0116359dbd9fc.dir
+      size: 66262328
+      nfiles: 2

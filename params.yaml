@@ -1,6 +1,6 @@
 data_ingestion:
   test_size: 0.20
-  data_path: "IMDB Dataset.csv"
+  data_path: "src/IMDB Dataset.csv"
 
 model_building:
   ngram_range: [1,3]
