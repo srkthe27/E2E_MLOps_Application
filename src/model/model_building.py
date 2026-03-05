@@ -65,3 +65,28 @@ def load_data(data_url: str) -> pd.DataFrame:
     except Exception as e:
         logger.error('Unexpected error occurred while loading the data: %s', e)
         raise
+
+def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple) -> tuple:
+    try:
+        vectorizer = TfidfVectorizer(max_features=max_features, ngram_range=ngram_range)
+
+        x_text = vectorizer.fit_transform(train_data['review'])
+        x_num = train_data.drop(columns=['review', 'sentiment'])
+        X_train = np.hstack([x_text.toarray(), x_num.values])
+        y_train = train_data['sentiment'].values
+
+        logger.debug('TF-IDF Applied for train dataset with size %d',X_train.shape)
+
+        with open(os.path.join(get_root_directory(), 'tfidf_vectorizer.pkl'), 'wb') as f:
+            pickle.dump(vectorizer, f)
+
+        logger.debug('TF-IDF applied with trigrams and data transformed')
+        return X_train, y_train
+    except Exception as e:
+        logger.error('Error during TF-IDF transformation: %s', e)
+        raise
+
+def get_root_directory() -> str:
+    root_directory = os.path.dirname(os.path.abspath(__file__))
+    return root_directory
+
