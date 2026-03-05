@@ -87,8 +87,8 @@ def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple)
         raise
 
 def get_root_directory() -> str:
-    root_directory = os.path.dirname(os.path.abspath(__file__))
-    return root_directory
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.join(current_directory, '../../'))
 
 def train_model(X_train: np.ndarray, y_train: np.ndarray, learning_rate: float, max_depth: int, n_estimators: int) -> lgb.LGBMClassifier:
     try:
