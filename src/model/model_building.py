@@ -90,3 +90,25 @@ def get_root_directory() -> str:
     root_directory = os.path.dirname(os.path.abspath(__file__))
     return root_directory
 
+def train_model(X_train: np.ndarray, y_train: np.ndarray, learning_rate: float, max_depth: int, n_estimators: int) -> lgb.LGBMClassifier:
+    try:
+        best_model = lgb.LGBMClassifier(
+            objective='binary',
+            num_class=2,
+            metric='binary_logloss',
+            is_unbalance=True,
+            class_weight='balanced',
+            reg_alpha=0.1,
+            reg_lambda=0.1,
+            learning_rate=learning_rate,
+            max_depth=max_depth,
+            n_estimators=n_estimators
+        )
+        best_model.fit(X_train, y_train)
+        logger.debug('LightLGBM model trained with learning_rate=%f, max_depth=%d, n_estimators=%d', learning_rate, max_depth, n_estimators)
+
+        return best_model
+    except Exception as e:
+        logger.error('Error during model training: %s', e)
+        raise
+
