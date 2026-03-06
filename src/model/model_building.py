@@ -112,3 +112,39 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray, learning_rate: float, 
         logger.error('Error during model training: %s', e)
         raise
 
+def save_model(model, file_path: str) -> None:
+    """Save the trained model to a file."""
+    try:
+        with open(file_path, 'wb') as file:
+            pickle.dump(model, file)
+        logger.debug('Model saved to %s', file_path)
+    except Exception as e:
+        logger.error('Error occurred while saving the model: %s', e)
+        raise
+
+def main():
+    try:
+        root_directory = get_root_directory()
+        params = load_params(os.path.join(root_directory,'params.yaml'))
+        
+        max_features = params['model_building']['max_features']
+        ngram_range = tuple(params['model_building']['ngram_range'])
+        n_estimators = params['model_building']['n_estimators']
+        max_depth = params['model_building']['max_depth']
+        learning_rate = params['model_building']['learning_rate']
+
+        train_data = load_data(os.path.join(root_directory,'data/processed/processed_train.csv'))
+
+        X_train, y_train = apply_tfidf(train_data, max_features, ngram_range)
+        model = train_model(
+            X_train=X_train,
+            y_train=y_train,
+            learning_rate=learning_rate,
+            max_depth=max_depth,
+            n_estimators=n_estimators
+        )
+        save_model(model, os.path.join(root_directory,'lgbm_model.pkl'))
+
+    except Exception as e:
+        logger.error('Failed to complete the feature engineering and model building process: %s', e)
+        print(f"Error: {e}")
