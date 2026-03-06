@@ -54,3 +54,30 @@ def load_data(data_url: str) -> pd.DataFrame:
     except Exception as e:
         logger.error('Unexpected error occurred while loading the data: %s', e)
         raise
+
+def load_model(model_path: str):
+    try:
+        with open(model_path, 'rb') as file:
+            model = pickle.load(file)
+        logger.debug('Model loaded from %s', model_path)
+        return model
+    except FileNotFoundError:
+        logger.error('Model file not found at %s', model_path)
+        raise
+    except Exception as e:
+        logger.error('Unexpected error occurred while loading the model: %s', e)
+        raise
+
+def load_vectorizer(vectorizer_path: str) -> TfidfVectorizer:
+    try:
+        with open(vectorizer_path, 'rb') as f:
+            vectorizer = pickle.load(f)
+        logger.debug('TF-IDF vectorizer loaded from %s', vectorizer_path)
+        return vectorizer
+    except FileNotFoundError:
+        logger.error('Vectorizer file not found at %s', vectorizer_path)
+        raise
+    except Exception as e:
+        logger.error('Unexpected error occurred while loading the vectorizer: %s', e)
+        raise
+
