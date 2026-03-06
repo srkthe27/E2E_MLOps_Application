@@ -77,8 +77,7 @@ def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple)
 
         logger.debug('TF-IDF Applied for train dataset with size %d',X_train.shape)
 
-        with open(os.path.join(get_root_directory(), 'tfidf_vectorizer.pkl'), 'wb') as f:
-            pickle.dump(vectorizer, f)
+        save_model(vectorizer, os.path.join(get_root_directory(), 'saved_model/tfidf_vectorizer.pkl'))
 
         logger.debug('TF-IDF applied with trigrams and data transformed')
         return X_train, y_train
@@ -127,13 +126,14 @@ def main():
         root_directory = get_root_directory()
         params = load_params(os.path.join(root_directory,'params.yaml'))
         
+        data_path = params['model_building']['train_data_path']
         max_features = params['model_building']['max_features']
         ngram_range = tuple(params['model_building']['ngram_range'])
         n_estimators = params['model_building']['n_estimators']
         max_depth = params['model_building']['max_depth']
         learning_rate = params['model_building']['learning_rate']
 
-        train_data = load_data(os.path.join(root_directory,'data/processed/processed_train.csv'))
+        train_data = load_data(os.path.join(root_directory,data_path))
 
         X_train, y_train = apply_tfidf(train_data, max_features, ngram_range)
         model = train_model(
@@ -143,7 +143,7 @@ def main():
             max_depth=max_depth,
             n_estimators=n_estimators
         )
-        save_model(model, os.path.join(root_directory,'lgbm_model.pkl'))
+        save_model(model, os.path.join(root_directory,'saved_model/lgbm_model.pkl'))
 
     except Exception as e:
         logger.error('Failed to complete the feature engineering and model building process: %s', e)
