@@ -14,7 +14,7 @@ from mlflow.models import infer_signature
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report, confusion_matrix
 
-load_dotenv()
+load_dotenv(override=True)
 
 logger = logging.getLogger('model_evaluation')
 logger.setLevel('DEBUG')
@@ -31,6 +31,10 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
+
+def get_root_directory() -> str:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.join(current_dir, '../../'))
 
 def load_params(params_path: str) -> dict:
     try:
@@ -123,9 +127,9 @@ def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
         logger.error('Error during model evaluation: %s', e)
         raise
 
-def log_confussion_matrix(cm, dataset_name):
+def log_confusion_matrix(cm, dataset_name):
     try:
-        logger.debug('Logging confussion matrix')
+        logger.debug('Logging confusion matrix')
 
         plt.figure(figsize=(10,7))
         sns.heatmap(cm, annot=True, fmt='d',cmap='Blues')
@@ -156,3 +160,68 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
     except Exception as e:
         logger.error('Error occurred while saving the model info: %s', e)
         raise
+
+def main():
+    MLFLOW_URL = os.getenv("MLFLOW_ENDPOINT_URL")
+    mlf.set_tracking_uri(MLFLOW_URL)
+    mlf.set_experiment("IMDB_Sentiment_Analysis using DVC pipeline runs")
+
+    with mlf.start_run() as run:
+        try:
+            root_dir = get_root_directory()
+            params_path = os.path.join(root_dir, 'params.yaml')
+            params = load_params(params_path=params_path)
+
+            for key, value in params.items():
+                mlflow.log_param(key, value)
+            
+            model = load_model(os.path.join(root_dir, 'saved_model/lgbm_model.pkl'))
+            vectorizer = load_vectorizer(os.path.join(root_dir, 'saved_model/tfidf_vectorizer.pkl'))
+
+            test_data_path = params['model_evaluation']['test_data_path']
+
+            x_text = vectorizer.transform(test_data_path['clean_text'])
+            x_num = test_data_path.drop(columns=['clean_text','review', 'sentiment'])
+            X_test = np.hstack([x_text.toarray(), x_num.values])
+            y_test = test_data_path['sentiment'].values
+
+            input_example = pd.DataFrame(X_test.to_array()[:5], columns=vectorizer.get_feature_names_out())
+            signature = infer_signature(input_example, model.predict(X_test[:5]))
+
+            mlflow.sklearn.log_model(
+                model,
+                artifact_path='model',
+                signature=signature,
+                input_example=input_example
+            )
+
+            model_path = 'model'
+            save_model_info(
+                run_id=run.info.run_id,
+                model_path=model_path,
+                file_path='experiment_model_info.json'
+            )
+
+            mlflow.log_artifact(os.path.join(root_dir, 'tfidf_vectorizer.pkl'))
+            report, cm = evaluate_model(model, X_test, y_test)
+
+            for label, metrics in report.items():
+                if isinstance(metrics, dict):
+                    mlflow.log_metrics({
+                        f"test_{label}_precision": metrics['precision'],
+                        f"test_{label}_recall": metrics['recall'],
+                        f"test_{label}_f1-score": metrics['f1-score']
+                    })
+
+            log_confusion_matrix(cm, "Test Data")
+
+            mlflow.set_tag("model_type", "LightGBM")
+            mlflow.set_tag("task", "Sentiment Analysis")
+            mlflow.set_tag("dataset", "YouTube Comments")
+
+        except Exception as e:
+            logger.error(f"Failed to complete model evaluation: {e}")
+            print(f"Error: {e}")
+
+if __name__ == '__main__':
+    main()

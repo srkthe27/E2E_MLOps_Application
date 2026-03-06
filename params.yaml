@@ -9,3 +9,7 @@ model_building:
   learning_rate: 0.09
   max_depth: 20
   n_estimators: 367
+
+model_evaluation:
+  test_data_path: "data/processed/preprocessed_test.csv"
+  
