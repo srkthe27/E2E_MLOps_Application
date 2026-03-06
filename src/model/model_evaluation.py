@@ -9,9 +9,12 @@ import pandas as pd
 import mlflow as mlf
 import seaborn as sns
 import matplotlib.pyplot as plt
+from dotenv import load_dotenv
 from mlflow.models import infer_signature
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report, confusion_matrix
+
+load_dotenv()
 
 logger = logging.getLogger('model_evaluation')
 logger.setLevel('DEBUG')
@@ -104,3 +107,52 @@ def load_vectorizer(vectorizer_path: str) -> TfidfVectorizer:
         logger.error('Unexpected error occurred while loading the vectorizer: %s', e)
         raise
 
+def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
+    try:
+        logger.debug("Starting model evaluation")
+
+        y_pred = model.predict(X_test)
+        report = classification_report(y_test,y_pred,output_dict=True)
+        cm = confusion_matrix(y_test, y_pred)
+
+        logger.debug("Model evaluation completed successfully")
+
+        return report, cm
+    
+    except Exception as e:
+        logger.error('Error during model evaluation: %s', e)
+        raise
+
+def log_confussion_matrix(cm, dataset_name):
+    try:
+        logger.debug('Logging confussion matrix')
+
+        plt.figure(figsize=(10,7))
+        sns.heatmap(cm, annot=True, fmt='d',cmap='Blues')
+        plt.title(f'Confusion Matrix for {dataset_name}')
+        plt.xlabel('Predicted')
+        plt.ylabel('Actual')
+
+        cm_file_path = f"Confusion_matrix_{dataset_name}.png"
+        plt.savefig(cm_file_path)
+        mlf.log_artifact(cm_file_path)
+        logger.debug('Confussion matrix logged successfully')
+    
+    except Exception as e:
+        logger.error('Error logging confussion matrix: %s', e)
+        raise
+
+def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
+    try:
+        logger.debug("Creating model info")
+
+        model_info={
+            "run_id": run_id,
+            "model_path": model_path
+        }
+        with open(file_path, 'w') as file:
+            json.dump(model_info, file, indent=4)
+        logger.debug('Model info saved to %s', file_path)
+    except Exception as e:
+        logger.error('Error occurred while saving the model info: %s', e)
+        raise
