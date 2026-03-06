@@ -70,8 +70,8 @@ def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple)
     try:
         vectorizer = TfidfVectorizer(max_features=max_features, ngram_range=ngram_range)
 
-        x_text = vectorizer.fit_transform(train_data['review'])
-        x_num = train_data.drop(columns=['review', 'sentiment'])
+        x_text = vectorizer.fit_transform(train_data['clean_text'])
+        x_num = train_data.drop(columns=['clean_text','review', 'sentiment'])
         X_train = np.hstack([x_text.toarray(), x_num.values])
         y_train = train_data['sentiment'].values
 
@@ -93,7 +93,7 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray, learning_rate: float, 
     try:
         best_model = lgb.LGBMClassifier(
             objective='binary',
-            num_class=2,
+            num_class=1, # For binary classification, num_class should be set to 1
             metric='binary_logloss',
             is_unbalance=True,
             class_weight='balanced',
