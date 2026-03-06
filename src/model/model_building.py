@@ -75,7 +75,7 @@ def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple)
         X_train = np.hstack([x_text.toarray(), x_num.values])
         y_train = train_data['sentiment'].values
 
-        logger.debug('TF-IDF Applied for train dataset with size %d',X_train.shape)
+        logger.debug('TF-IDF Applied for train dataset with size %s',X_train.shape)
 
         save_model(vectorizer, os.path.join(get_root_directory(), 'saved_model/tfidf_vectorizer.pkl'))
 
