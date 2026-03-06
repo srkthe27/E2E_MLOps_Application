@@ -124,6 +124,7 @@ def save_model(model, file_path: str) -> None:
 def main():
     try:
         root_directory = get_root_directory()
+        os.makedirs("saved_model", exist_ok=True)
         params = load_params(os.path.join(root_directory,'params.yaml'))
         
         data_path = params['model_building']['train_data_path']
@@ -148,3 +149,6 @@ def main():
     except Exception as e:
         logger.error('Failed to complete the feature engineering and model building process: %s', e)
         print(f"Error: {e}")
+
+if __name__ == '__main__':
+    main()

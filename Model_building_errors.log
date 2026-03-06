@@ -1,0 +1,3 @@
+2026-03-06 13:42:34,502 - model_building - ERROR - Error occurred while saving the model: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\model\\../..\\saved_model/tfidf_vectorizer.pkl'
+2026-03-06 13:42:34,503 - model_building - ERROR - Error during TF-IDF transformation: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\model\\../..\\saved_model/tfidf_vectorizer.pkl'
+2026-03-06 13:42:34,504 - model_building - ERROR - Failed to complete the feature engineering and model building process: [Errno 2] No such file or directory: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\model\\../..\\saved_model/tfidf_vectorizer.pkl'

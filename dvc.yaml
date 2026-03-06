@@ -11,7 +11,7 @@ stages:
       - data/processed
 
   model_training:
-    cmd: python -m src.model.model_building.py
+    cmd: python -m src.model.model_building
     deps:
       - data/processed/preprocessed_train.csv
       - src/model/model_building.py
