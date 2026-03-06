@@ -13,7 +13,7 @@ stages:
   model_training:
     cmd: python -m src.model.model_building.py
     deps:
-      - data/processed/processed_train.csv
+      - data/processed/preprocessed_train.csv
       - src/model/model_building.py
     params:
       - model_building.ngram_range
