@@ -29,8 +29,27 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
+def load_params(params_path: str) -> dict:
+    try:
+        logger.debug('Attempting to load parameters from %s', params_path)
+        with open(params_path, 'r') as file:
+            params = yaml.safe_load(file)
+        logger.debug('Parameters loaded from %s', params_path)
+        return params
+    except FileNotFoundError:
+        logger.error('Parameters file not found at %s', params_path)
+        raise
+    except yaml.YAMLError as e:
+        logger.error('Error parsing YAML file at %s: %s', params_path, e)
+        raise
+    except Exception as e:
+        logger.error('Unexpected error occurred while loading parameters: %s', e)
+        raise
+
+
 def load_data(data_url: str) -> pd.DataFrame:
     try:
+        logger.debug('Attempting to load data from %s', data_url)
         _, ext = os.path.splitext(data_url)
         ext = ext.lower()
 
@@ -57,6 +76,8 @@ def load_data(data_url: str) -> pd.DataFrame:
 
 def load_model(model_path: str):
     try:
+        logger.debug('Attempting to load model from %s', model_path)
+
         with open(model_path, 'rb') as file:
             model = pickle.load(file)
         logger.debug('Model loaded from %s', model_path)
@@ -70,6 +91,8 @@ def load_model(model_path: str):
 
 def load_vectorizer(vectorizer_path: str) -> TfidfVectorizer:
     try:
+        logger.debug('Attempting to load TF-IDF vectorizer from %s', vectorizer_path)
+
         with open(vectorizer_path, 'rb') as f:
             vectorizer = pickle.load(f)
         logger.debug('TF-IDF vectorizer loaded from %s', vectorizer_path)
