@@ -179,13 +179,14 @@ def main():
             vectorizer = load_vectorizer(os.path.join(root_dir, 'saved_model/tfidf_vectorizer.pkl'))
 
             test_data_path = params['model_evaluation']['test_data_path']
+            test_data = pd.read_csv(test_data_path)
 
-            x_text = vectorizer.transform(test_data_path['clean_text'])
-            x_num = test_data_path.drop(columns=['clean_text','review', 'sentiment'])
+            x_text = vectorizer.transform(test_data['clean_text'])
+            x_num = test_data.drop(columns=['clean_text','review', 'sentiment'])
             X_test = np.hstack([x_text.toarray(), x_num.values])
-            y_test = test_data_path['sentiment'].values
+            y_test = test_data['sentiment'].values
 
-            input_example = pd.DataFrame(X_test.to_array()[:5], columns=vectorizer.get_feature_names_out())
+            input_example = pd.DataFrame(X_test[:5])
             signature = infer_signature(input_example, model.predict(X_test[:5]))
 
             mlflow.sklearn.log_model(

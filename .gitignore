@@ -1,4 +1,5 @@
-.dvc
 .env
+.dvc
 .dvcignore
 E2E_MLOps_Application.egg-info
+/experiment_model_info.json

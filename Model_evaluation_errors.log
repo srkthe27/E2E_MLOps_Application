@@ -1,0 +1,5 @@
+2026-03-07 11:56:24,850 - model_evaluation - ERROR - Failed to complete model evaluation: string indices must be integers
+2026-03-07 12:00:25,543 - model_evaluation - ERROR - Failed to complete model evaluation: 'str' object has no attribute 'drop'
+2026-03-07 12:01:30,309 - model_evaluation - ERROR - Failed to complete model evaluation: 'numpy.ndarray' object has no attribute 'to_array'
+2026-03-07 12:02:18,327 - model_evaluation - ERROR - Failed to complete model evaluation: all the input arrays must have same number of dimensions, but the array at index 0 has 1 dimension(s) and the array at index 1 has 2 dimension(s)
+2026-03-07 12:07:51,310 - model_evaluation - ERROR - Failed to complete model evaluation: [WinError 2] The system cannot find the file specified: 'D:\\Programs\\Python\\MLops\\my-code\\Final_Project\\src\\model\\../..\\tfidf_vectorizer.pkl'
