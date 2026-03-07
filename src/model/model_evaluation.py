@@ -203,7 +203,7 @@ def main():
                 file_path='experiment_model_info.json'
             )
 
-            mlflow.log_artifact(os.path.join(root_dir, 'tfidf_vectorizer.pkl'))
+            mlflow.log_artifact(os.path.join(root_dir, 'saved_model/tfidf_vectorizer.pkl'))
             report, cm = evaluate_model(model, X_test, y_test)
 
             for label, metrics in report.items():

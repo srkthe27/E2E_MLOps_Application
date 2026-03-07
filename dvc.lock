@@ -68,13 +68,13 @@ stages:
       size: 36501
     - path: src/model/model_evaluation.py
       hash: md5
-      md5: 7393dc35ad106d312e4509bab8d2c733
-      size: 8006
+      md5: e16f587a061a390d68dbdbeae7001624
+      size: 8018
     params:
       params.yaml:
         model_evaluation.test_data_path: data/processed/preprocessed_test.csv
     outs:
     - path: experiment_model_info.json
       hash: md5
-      md5: a9e0771463887990a3c6a3575c681222
+      md5: 2fd16f291b02cdf9f2df81f7086d37ca
       size: 82
