@@ -24,3 +24,15 @@ stages:
     outs:
       - saved_model/tfidf_vectorizer.pkl
       - saved_model/lgbm_model.pkl
+
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation
+    deps:
+      - data/processed/preprocessed_test.csv
+      - saved_model/tfidf_vectorizer.pkl
+      - saved_model/lgbm_model.pkl
+      - src/model/model_evaluation.py
+    params:
+      - model_evaluation.test_data_path
+    outs:
+      - experiment_model_info.json

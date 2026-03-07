@@ -1,3 +1,4 @@
 .dvc
+.env
 .dvcignore
 E2E_MLOps_Application.egg-info
