@@ -36,3 +36,10 @@ stages:
       - model_evaluation.test_data_path
     outs:
       - experiment_model_info.json
+  
+  model_registration:
+    cmd: python -m src.model.model_register
+    deps:
+      - experiment_model_info.json
+      - src/model/model_register.py
+    
